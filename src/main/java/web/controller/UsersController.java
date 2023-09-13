@@ -40,7 +40,7 @@ public class UsersController {
     @PostMapping()
     public String create(@ModelAttribute("user") User user) {//создать
         userDao.save(user);
-        return "redirect:/users";//переход на др страницу .user
+        return "redirect:/users";//переход на др страницу /user
     }
 
     @GetMapping("/{id}/edit")
@@ -48,6 +48,7 @@ public class UsersController {
         model.addAttribute("user", userDao.show(id));
         return "users/edit";
     }
+
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
