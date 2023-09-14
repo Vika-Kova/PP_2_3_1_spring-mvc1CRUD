@@ -6,17 +6,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import web.model.User;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:db.properties")
-@EnableTransactionManagement//транзакции управляются автоматически spring-OM
+@EnableTransactionManagement
 @ComponentScan("web")
 public class DataBaseConfig {
     //DataSource для получения соед с БД
@@ -52,14 +53,16 @@ public class DataBaseConfig {
         return factoryBean;
     }
 
-    //HibernateTransactionManager автоматически открывает транзакцию Hibernate
     @Bean
-    public HibernateTransactionManager getTransactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(getSessionFactory().getObject());
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
 }
+
+
+
 
 
 
